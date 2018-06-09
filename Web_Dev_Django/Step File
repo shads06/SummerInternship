@@ -1,0 +1,148 @@
+udemy
+
+get request
+put request
+
+gitall.tech
+
+
+virtual environment
+
+
+//Start from here
+python
+pip install virtualenv
+mkdir api_class
+cd api_class
+virtualenv v
+v\Scripts\activate
+.
+pip install django
+django-admin startproject super
+
+cd super
+python manage.py startapp vellapanti
+
+//Now open Sublimetext
+//Now go to settings.py file in super project and add tis code
+//Under Installed_APPS = [
+	//Some Junk of code here
+	//Add next line there
+	'vellapanti',
+]
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+.
+
+click on models.py in left panel and add this code in it
+from django.db import models
+#Create your models here.
+class vella(models.Model):
+	name = models.CharField(max_length=120)
+	real_name = models.CharField(max_length=150)
+	
+	strength = models.CharField(max_length=250)
+	weapon = models.CharField(max_length=300)
+	
+	location = models.CharField(max_length=300)
+	
+	UNIVERSE = (
+				('Marvel','Marvel'),
+				('DC','DC'),
+				('Other','Miscellaneous'),
+				)
+	
+	universe = models.CharField(max_length=10, choices=UNIVERSE)
+	
+	alive = models.BooleanField(default=True)
+	
+	def __unicode__(self):
+		return self.name
+
+
+python manage.py createsuperuser
+
+
+//Now add Webaddress\admin to access django provided admin panel
+//Now to change page address from admin to something else follow following steps
+//under super project, find file url.py and replace admin with your own text
+.
+//We skipped making from building through coding
+.
+.
+//Go to Vellapanti app folder in left panel
+//Locate admin.py file. Open it.
+from django.contrib import admin
+
+# Register your models here.
+from .models import Vella
+
+class VellaAdmin(admin.ModelAdmin):
+	list_display = ['name','real_name']
+	class Meta:
+		model = vella
+		fields = ['name', 'real_name', 'strength', 'weapon', 'location', 'universe', 'alive']
+		
+admin.site.register(vella, vellaAdmin)
+.
+
+
+//Now go to your left panel and locate views.py
+from django.shortcuts import render
+
+#Create your views here.
+from .models import vella
+
+def super_hero_view(request):
+	infoset = vella.objects.all()
+	
+	context = {
+		'infoset' : infoset
+	}
+	
+	return render(request, 'base.html', context)
+
+
+	
+//Create an HTML file
+<!doctype html>
+<head>
+	<title>VIPS Class</title>
+</head>
+
+<body>
+	{% for x in infoset %}
+	<p>{{x.name}}</p>
+	<p>{{x.real_name}}</p>
+	<p>{{x.strength}}</p>
+	<p>==============</p>
+	{% endfor %}
+</body>
+</html>
+
+//Save above file with base.html name in new folder called templates in super project folder
+
+//Now we will set url to open a page to view data from db
+//Now open your url.py file and add following code
+
+path('base/', views.super_hero_view, name='vella_view')
+
+//But now we yet didn't tell our django that where is base.html
+//Open Settings.py file and add following code under template = { } code
+'DIRS': [os.path.join(BASE_DIR,'templates')], //After backend
+
+deactivate
+
+//Ends here
+
+
+
+
+
+full form of pip
+mvc - model view control
+model is use to shape our database
+
+static file, templates in html
